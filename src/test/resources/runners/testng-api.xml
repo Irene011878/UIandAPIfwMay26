@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="API Suite">
+
+    <test name="API Products">
+        <classes>
+            <class name="testCases.api.products.API01_GetAllProductsTest"/>
+            <class name="testCases.api.products.API02_PostAllProductsTest"/>
+            <class name="testCases.api.products.API05_SearchProductTest"/>
+            <class name="testCases.api.products.API06_SearchProductWithoutParameterTest"/>
+        </classes>
+    </test>
+
+    <test name="API Authentication">
+        <classes>
+            <class name="testCases.api.authentication.API07_VerifyLoginTest"/>
+            <class name="testCases.api.authentication.API08_VerifyLoginWithoutEmailTest"/>
+            <class name="testCases.api.authentication.API09_VerifyLoginDeleteTest"/>
+            <class name="testCases.api.authentication.API10_VerifyLoginInvalidTest"/>
+        </classes>
+    </test>
+
+    <test name="API Users">
+        <classes>
+            <class name="testCases.api.users.API11_CreateAccountTest"/>
+            <class name="testCases.api.users.API12_DeleteAccountTest"/>
+            <class name="testCases.api.users.API13_UpdateAccountTest"/>
+            <class name="testCases.api.users.API14_GetUserDetailByEmailTest"/>
+        </classes>
+    </test>
+
+    <test name="API Brands">
+        <classes>
+            <class name="testCases.api.brands.API03_GetAllBrandsTest"/>
+            <class name="testCases.api.brands.API04_PutAllBrandsTest"/>
+        </classes>
+    </test>
+
+</suite>

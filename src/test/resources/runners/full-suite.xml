@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="Full Suite">
+
+    <!-- ALL UI TESTS -->
+    <test name="UI Full">
+
+        <packages>
+            <package name="testCases.ui.account"/>
+            <package name="testCases.ui.cart"/>
+            <package name="testCases.ui.checkout"/>
+            <package name="testCases.ui.products"/>
+            <package name="testCases.ui.contact"/>
+            <package name="testCases.ui.navigation"/>
+            <package name="testCases.ui.subscription"/>
+        </packages>
+
+    </test>
+
+    <!-- ALL API TESTS -->
+    <test name="API Full">
+
+        <packages>
+            <package name="testCases.api.products"/>
+            <package name="testCases.api. authentication"/>
+            <package name="testCases.api.users"/>
+            <package name="testCases.api.brands"/>
+        </packages>
+
+    </test>
+
+</suite>

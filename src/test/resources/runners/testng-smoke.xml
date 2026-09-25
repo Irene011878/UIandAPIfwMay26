@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="Smoke Suite">
+
+    <!-- ========================================================= -->
+    <!-- UI SMOKE TESTS                                            -->
+    <!-- ========================================================= -->
+
+    <test name="UI Smoke">
+
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
+
+        <packages>
+            <package name="testCases.ui.account"/>
+            <package name="testCases.ui.cart"/>
+            <package name="testCases.ui.checkout"/>
+            <package name="testCases.ui.products"/>
+        </packages>
+
+    </test>
+
+
+    <!-- ========================================================= -->
+    <!-- API SMOKE TESTS                                           -->
+    <!-- ========================================================= -->
+
+    <test name="API Smoke">
+
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
+
+        <packages>
+            <package name="testCases.api.products"/>
+            <package name="testCases.api.authentication"/>
+            <package name="testCases.api.users"/>
+        </packages>
+
+    </test>
+
+</suite>
