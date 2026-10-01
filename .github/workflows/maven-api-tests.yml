@@ -23,7 +23,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -45,14 +44,11 @@ jobs:
         if: always()
         run: mvn allure:report
 
-      - name: Upload Allure report
-        uses: actions/upload-pages-artifact@v4
+      - name: Upload API Allure report
+        uses: actions/upload-artifact@v4
         with:
+          name: allure-report-api
           path: target/site/allure-maven-plugin
-
-      - name: Deploy Allure report
-        id: deployment
-        uses: actions/deploy-pages@v4
 
 
   ui-tests:
@@ -73,10 +69,57 @@ jobs:
       - name: Run UI tests
         run: mvn test "-Dheadless=true" "-DsuiteXmlFile=src/test/resources/runners/testng-ui.xml"
 
-      - name: Upload Allure results
+      - name: Generate UI Allure report
+        if: always()
+        run: mvn allure:report
+
+      - name: Upload UI Allure report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results-ui
-          path: allure-results/
+          name: allure-report-ui
+          path: target/site/allure-maven-plugin
           if-no-files-found: warn
+
+  publish-allure:
+        name: Publish Allure Reports
+        if: always()
+        needs:
+          - api-tests
+          - ui-tests
+
+        runs-on: ubuntu-latest
+
+        permissions:
+          contents: read
+          pages: write
+          id-token: write
+
+        environment:
+          name: github-pages
+          url: ${{ steps.deployment.outputs.page_url }}
+
+        steps:
+          - name: Configure GitHub Pages
+            uses: actions/configure-pages@v5
+
+          - name: Download API Allure report
+            uses: actions/download-artifact@v4
+            with:
+              name: allure-report-api
+              path: site/api
+
+          - name: Download UI Allure report
+            uses: actions/download-artifact@v4
+            with:
+              name: allure-report-ui
+              path: site/ui
+
+          - name: Upload combined Allure reports
+            uses: actions/upload-pages-artifact@v4
+            with:
+              path: site
+
+          - name: Deploy Allure reports
+            id: deployment
+            uses: actions/deploy-pages@v4
