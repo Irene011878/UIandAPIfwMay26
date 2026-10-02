@@ -115,6 +115,13 @@ jobs:
               name: allure-report-ui
               path: site/ui
 
+          - name: Verify downloaded reports
+            run: |
+              echo "=== API REPORT ==="
+              find site/api -maxdepth 2 -type f | head -30
+              echo "=== UI REPORT ==="
+              find site/ui -maxdepth 2 -type f | head -30
+
           - name: Upload combined Allure reports
             uses: actions/upload-pages-artifact@v4
             with:
