@@ -84,51 +84,133 @@ jobs:
           if-no-files-found: warn
 
   publish-allure:
-        name: Publish Allure Reports
-        if: always()
-        needs:
-          - api-tests
-          - ui-tests
+    name: Publish Allure Reports
+    if: always()
+    needs:
+      - api-tests
+      - ui-tests
 
-        runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-        permissions:
-          contents: read
-          pages: write
-          id-token: write
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
 
-        environment:
-          name: github-pages
-          url: ${{ steps.deployment.outputs.page_url }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
-        steps:
-          - name: Configure GitHub Pages
-            uses: actions/configure-pages@v5
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
 
-          - name: Download API Allure report
-            uses: actions/download-artifact@v4
-            with:
-              name: allure-report-api
-              path: site/api
+      - name: Download API Allure report
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-report-api
+          path: site/api
 
-          - name: Download UI Allure report
-            uses: actions/download-artifact@v4
-            with:
-              name: allure-report-ui
-              path: site/ui
+      - name: Download UI Allure report
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-report-ui
+          path: site/ui
 
-          - name: Verify downloaded reports
-            run: |
-              echo "=== API REPORT ==="
-              find site/api -maxdepth 2 -type f | head -30
-              echo "=== UI REPORT ==="
-              find site/ui -maxdepth 2 -type f | head -30
+      - name: Verify downloaded reports
+        run: |
+          echo "=== API REPORT ==="
+          find site/api -maxdepth 2 -type f | head -30
+          echo "=== UI REPORT ==="
+          find site/ui -maxdepth 2 -type f | head -30
 
-          - name: Upload combined Allure reports
-            uses: actions/upload-pages-artifact@v4
-            with:
-              path: site
+      - name: Create Allure reports landing page
+        run: |
+          cat <<'EOF' > site/index.html
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>UI & API Automation Framework</title>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                margin: 0;
+                padding: 60px 20px;
+                background: #f4f6f8;
+              }
 
-          - name: Deploy Allure reports
-            id: deployment
-            uses: actions/deploy-pages@v4
+              h1 {
+                margin-bottom: 10px;
+              }
+
+              p {
+                color: #555;
+                margin-bottom: 40px;
+              }
+
+              .reports {
+                display: flex;
+                justify-content: center;
+                gap: 30px;
+                flex-wrap: wrap;
+              }
+
+              .report {
+                background: white;
+                padding: 30px;
+                width: 220px;
+                border-radius: 10px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+              }
+
+              a {
+                display: inline-block;
+                margin-top: 15px;
+                padding: 12px 20px;
+                background: #333;
+                color: white;
+                text-decoration: none;
+                border-radius: 6px;
+              }
+
+              a:hover {
+                background: #555;
+              }
+            </style>
+          </head>
+
+          <body>
+            <h1>UI & API Automation Framework</h1>
+
+            <p>Allure Test Reports</p>
+
+            <div class="reports">
+
+              <div class="report">
+                <h2>API Tests</h2>
+                <p>View the API automation test report.</p>
+                <a href="api/">Open API Report</a>
+              </div>
+
+              <div class="report">
+                <h2>UI Tests</h2>
+                <p>View the UI automation test report.</p>
+                <a href="ui/">Open UI Report</a>
+              </div>
+
+            </div>
+          </body>
+          </html>
+          EOF
+
+      - name: Upload combined Allure reports
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+
+      - name: Deploy Allure reports
+        id: deployment
+        uses: actions/deploy-pages@v4
