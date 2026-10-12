@@ -8,11 +8,22 @@ on:
     branches:
       - master
   workflow_dispatch:
+    inputs:
+      test_suite:
+        description: '¿Qué pruebas deseas ejecutar?'
+        required: true
+        default: 'both'
+        type: choice
+        options:
+          - api
+          - ui
+          - both
 
 jobs:
 
   api-tests:
     name: API Tests
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.test_suite == 'api' || inputs.test_suite == 'both' }}
     runs-on: ubuntu-latest
 
     permissions:
@@ -56,6 +67,7 @@ jobs:
 
   ui-tests:
     name: UI Tests
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.test_suite == 'ui' || inputs.test_suite == 'both' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -86,7 +98,7 @@ jobs:
 
   publish-allure:
     name: Publish Allure Reports
-    if: always()
+    if: ${{ always() && (github.event_name != 'workflow_dispatch' || inputs.test_suite == 'both') }}
     needs:
       - api-tests
       - ui-tests
@@ -107,12 +119,14 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Download API Allure report
+        if: needs.api-tests.result != 'skipped'
         uses: actions/download-artifact@v4
         with:
           name: allure-report-api
           path: site/api
 
       - name: Download UI Allure report
+        if: needs.ui-tests.result != 'skipped'
         uses: actions/download-artifact@v4
         with:
           name: allure-report-ui
