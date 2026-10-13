@@ -1,5 +1,8 @@
 name: Automated Tests
 
+env:
+  TEST_ENV: ${{ vars.TEST_ENV }}
+
 on:
   push:
     branches:
@@ -36,6 +39,10 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
+      - name: Verify enviroment variable
+        run: |
+          echo "Test environment: $TEST_ENV"
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
