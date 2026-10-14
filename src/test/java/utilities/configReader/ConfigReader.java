@@ -33,9 +33,38 @@ public final class ConfigReader {
                 "Utility class should not be instantiated.");
     }
 
-    public static String getProperty(String key) {
+    /*public static String getProperty(String key) {
 
         String value = properties.getProperty(key);
+
+        if (value == null || value.trim().isEmpty()) {
+
+            throw new IllegalArgumentException(
+                    "Property '" + key + "' was not found in " + CONFIG_FILE_PATH
+            );
+
+        }
+
+        return value.trim();
+
+    }*/
+
+
+    public static String getProperty(String key) {
+
+        String value = null;
+
+        if ("environment".equals(key)) {
+            value = System.getenv("TEST_ENV");
+
+            if (value == null || value.trim().isEmpty()) {
+                value = System.getProperty("TEST_ENV");
+            }
+        }
+
+        if (value == null || value.trim().isEmpty()) {
+            value = properties.getProperty(key);
+        }
 
         if (value == null || value.trim().isEmpty()) {
 
