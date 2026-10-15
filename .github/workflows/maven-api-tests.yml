@@ -56,6 +56,9 @@ jobs:
           java-version: '21'
           cache: maven
 
+      - name: Verify TEST_ENV with ConfigReader
+        run: mvn -Dtest=ConfigReaderTest test
+
       - name: Run API tests
         run: mvn test "-DsuiteXmlFile=src/test/resources/runners/testng-api.xml"
 
