@@ -189,14 +189,6 @@ public class ProductsTest extends BaseTest {
         // 3. Click on any brand name
         productFlow.openBrand(data.get("brand"));
 
-        //System.out.println("Expected = " + data.get("brand"));
-
-        /*String actualTitle = driver.findElement(
-                By.xpath("//h2[@class='title text-center']")
-        ).getText();*/
-
-        //System.out.println("Actual = " + actualTitle);
-
         // 4. Verify that user is navigated to brand page and brand products are displayed
         Assert.assertTrue(
                 productsPage.isBrandTitleDisplayed(data.get("brand")),

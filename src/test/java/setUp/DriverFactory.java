@@ -1,14 +1,16 @@
+
 package setUp;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import utilities.configReader.ConfigReader;
+import utilities.download.DownloadPathManager;
 
+import java.io.File;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
-import java.io.File;
 
 public class DriverFactory {
 
@@ -39,6 +41,7 @@ public class DriverFactory {
     public void removeDriver() {
 
         DRIVER.remove();
+
     }
 
     private WebDriver createChromeDriver() {
@@ -49,14 +52,7 @@ public class DriverFactory {
         DRIVER.set(driver);
 
         String downloadPath =
-                ConfigReader.getProperty("download.path");
-
-        File downloadDirectory =
-                new File(downloadPath);
-
-        if (!downloadDirectory.exists()) {
-            downloadDirectory.mkdirs();
-        }
+                DownloadPathManager.initializeDownloadPath();
 
         Map<String, Object> downloadBehavior =
                 new HashMap<>();
@@ -67,7 +63,7 @@ public class DriverFactory {
 
         downloadBehavior.put(
                 "downloadPath",
-                downloadDirectory.getAbsolutePath());
+                downloadPath);
 
         driver.executeCdpCommand(
                 "Browser.setDownloadBehavior",
@@ -76,6 +72,7 @@ public class DriverFactory {
         configureDriver(driver);
 
         return driver;
+
     }
 
     private ChromeOptions buildChromeOptions() {
@@ -85,13 +82,15 @@ public class DriverFactory {
         Map<String, Object> prefs = new HashMap<>();
 
         String downloadPath =
-                ConfigReader.getProperty("download.path");
+                DownloadPathManager.initializeDownloadPath();
 
         File downloadDirectory =
                 new File(downloadPath);
 
         if (!downloadDirectory.exists()) {
+
             downloadDirectory.mkdirs();
+
         }
 
         // HEADLESS
@@ -149,6 +148,10 @@ public class DriverFactory {
         prefs.put(
                 "profile.default_content_setting_values.notifications",
                 2);
+
+        prefs.put(
+                "profile.managed_default_content_settings.images",
+                1);
 
         prefs.put(
                 "profile.managed_default_content_settings.images",

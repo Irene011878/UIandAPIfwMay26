@@ -6,96 +6,6 @@ import io.qameta.allure.Allure;
 
 import java.util.List;
 
-/*public class CartFlow {
-
-    private final CartPage cartPage;
-
-    public CartFlow(WebDriver driver){
-
-        cartPage = new CartPage(driver);
-    }
-
-    // CART VALIDATIONS
-
-    public boolean isCartDisplayed(){
-        return cartPage.isCartDisplayed();
-    }
-
-    public int getProductsCount(){
-        return cartPage.getProductsCount();
-    }
-
-    public boolean isProductInCart(String productName){
-        return cartPage.isProductInCart(productName);
-    }
-
-    public boolean waitUntilProductDisplayed(String productName){
-        return cartPage.waitUntilProductDisplayed(productName);
-    }
-
-    // PRODUCT DATA
-
-    public List<String> getProductsPrices(){
-        return cartPage.getProductsPrices(); }
-
-    public List<String> getProductsQuantities(){
-        return cartPage.getProductsQuantities(); }
-
-    public List<String> getTotalPrices(){
-        return cartPage.getTotalPrices(); }
-
-    // PRODUCT DATA BY PRODUCT
-    public String getProductPrice(String productName){
-        return cartPage.getProductPrice(productName);
-    }
-
-    public String getProductQuantity(String productName){
-        return cartPage.getProductQuantity(productName);
-    }
-
-    public String getProductTotal(String productName){
-        return cartPage.getProductTotal(productName); }
-
-    // PRODUCT DETAIL
-
-    public boolean isProductInformationDisplayed(){
-        return cartPage.isProductInformationDisplayed();
-    }
-
-    public void setProductQuantity(String quantity){
-        cartPage.setProductQuantity(quantity);
-    }
-
-    public void addProductFromProductDetail(){
-        cartPage.clickAddToCartButton();
-    }
-
-    //CART NAVIGATION
-    public void continueShopping(){
-        cartPage.clickContinueShopping();
-    }
-
-    public void viewCart(){
-        cartPage.clickViewCart();
-    }
-
-
-    // REMOVE PRODUCT
-
-    public void removeProduct(String productName){
-        cartPage.removeProduct(productName);
-    }
-
-    public boolean waitUntilProductRemoved(String productName){
-        return cartPage.waitUntilProductRemoved(productName);
-    }
-
-    // CHECKOUT
-
-    public void proceedToCheckout(){
-        cartPage.clickProceedToCheckout();
-    }
-}*/
 public class CartFlow {
 
     private final CartPage cartPage;
@@ -145,6 +55,15 @@ public class CartFlow {
 
     public String getProductQuantity(String productName) {
         return cartPage.getProductQuantity(productName);
+    }
+    //7oct
+    public boolean waitForProductQuantity(
+            String productName,
+            String expectedQuantity) {
+
+        return cartPage.waitForProductQuantity(
+                productName,
+                expectedQuantity);
     }
 
     public String getProductTotal(String productName) {

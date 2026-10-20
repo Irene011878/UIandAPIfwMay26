@@ -93,6 +93,16 @@ public class CartPage extends CommonMethods {
         return getText(cartMap.quantityByProduct(productName));
     }
 
+    //7 oct
+    public boolean waitForProductQuantity(
+            String productName,
+            String expectedQuantity) {
+
+        return waitText(
+                cartMap.quantityByProduct(productName),
+                expectedQuantity);
+    }
+
     //CHECKOUT
     public void clickProceedToCheckout() {
         click(cartMap.proceedToCheckoutBtn);

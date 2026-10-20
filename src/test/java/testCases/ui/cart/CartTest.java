@@ -168,7 +168,13 @@ public class CartTest extends BaseTest {
                         + data.get("productName")
                         + "' should be displayed in Cart.");
 
-        // c) - Verify exact product quantity
+        Assert.assertTrue(
+                cartFlow.waitForProductQuantity(
+                        data.get("productName"),
+                        data.get("quantity")),
+                "Product quantity in Cart should match the requested quantity."
+        );
+
         Assert.assertEquals(
                 cartFlow.getProductQuantity(data.get("productName")),
                 data.get("quantity"),

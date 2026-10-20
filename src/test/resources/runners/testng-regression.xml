@@ -1,45 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
-<suite name="Regression Suite">
+<suite name="Regression Suite"
+       parallel="tests"
+       thread-count="2">
 
-    <!-- UI REGRESSION TESTS -->
-    <test name="UI Regression">
-
+    <test name="Account Tests">
         <groups>
             <run>
                 <include name="regression"/>
             </run>
         </groups>
-
-        <packages>
-            <package name="testCases.ui.account"/>
-            <package name="testCases.ui.cart"/>
-            <package name="testCases.ui.checkout"/>
-            <package name="testCases.ui.products"/>
-            <package name="testCases.ui.contact"/>
-            <package name="testCases.ui.navigation"/>
-            <package name="testCases.ui.subscription"/>
-        </packages>
-
+        <classes>
+            <class name="testCases.ui.account.AccountTest"/>
+        </classes>
     </test>
 
-    <!-- API REGRESSION TESTS -->
-    <test name="API Regression">
-
+    <test name="Cart Tests">
         <groups>
             <run>
                 <include name="regression"/>
             </run>
         </groups>
+        <classes>
+            <class name="testCases.ui.cart.CartTest"/   >
+        </classes>
+    </test>
 
-        <packages>
-            <package name="testCases.api.products"/>
-            <package name="testCases.api.authentication"/>
-            <package name="testCases.api.users"/>
-            <package name="testCases.api.brands"/>
-        </packages>
+    <test name="Checkout Tests">
+        <groups>
+            <run>
+                <include name="regression"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="testCases.ui.checkout.CheckoutTest"/>
+        </classes>
+    </test>
 
+    <test name="Contact Us Tests">
+        <groups>
+            <run>
+                <include name="regression"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="testCases.ui.contact.ContactUsTest"/>
+        </classes>
+    </test>
+
+    <test name="Navigation Tests">
+        <groups>
+            <run>
+                <include name="regression"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="testCases.ui.navigation.NavigationTest"/>
+        </classes>
+    </test>
+
+    <test name="Products Tests">
+        <groups>
+            <run>
+                <include name="regression"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="testCases.ui.products.ProductsTest"/>
+        </classes>
+    </test>
+
+    <test name="Subscription Tests">
+        <groups>
+            <run>
+                <include name="regression"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="testCases.ui.subcription.SubscriptionTest"/>
+        </classes>
     </test>
 
 </suite>

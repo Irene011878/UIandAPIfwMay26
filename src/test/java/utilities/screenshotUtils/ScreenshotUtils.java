@@ -20,12 +20,7 @@ public class ScreenshotUtils {
                 ((TakesScreenshot) driver)
                         .getScreenshotAs(OutputType.BYTES);
 
-        /*Allure.addAttachment(
-                "Screenshot on failure",
-                "image/png",
-                new ByteArrayInputStream(screenshot),
-                ".png"
-        );*/
+
         AllureLifecycle lifecycle =
                 Allure.getLifecycle();
 
