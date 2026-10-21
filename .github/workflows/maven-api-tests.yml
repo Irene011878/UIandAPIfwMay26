@@ -39,8 +39,13 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Verify enviroment variable
+      - name: Verify environment variable
         run: |
+          if [ -z "$TEST_ENV" ]; then
+            echo "::error::TEST_ENV is not configured."
+            exit 1
+          fi
+
           echo "Test environment: $TEST_ENV"
 
       - name: Checkout repository
