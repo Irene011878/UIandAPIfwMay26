@@ -23,7 +23,7 @@
             </run>
         </groups>
         <classes>
-            <class name="testCases.ui.cart.CartTest"/   >
+            <class name="testCases.ui.cart.CartTest"/>
         </classes>
     </test>
 
@@ -82,4 +82,19 @@
         </classes>
     </test>
 
+    <!-- API REGRESSION TESTS -->
+
+    <test name="API Regression">
+        <groups>
+            <run>
+                <include name="regression"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="testCases.api.products"/>
+            <package name="testCases.api.authentication"/>
+            <package name="testCases.api.users"/>
+            <package name="testCases.api.brands"/>
+        </packages>
+    </test>
 </suite>

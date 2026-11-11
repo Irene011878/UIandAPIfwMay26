@@ -13,7 +13,7 @@
             <package name="testCases.ui.products"/>
             <package name="testCases.ui.contact"/>
             <package name="testCases.ui.navigation"/>
-            <package name="testCases.ui.subscription"/>
+            <package name="testCases.ui.subcription"/>
         </packages>
 
     </test>
@@ -23,7 +23,7 @@
 
         <packages>
             <package name="testCases.api.products"/>
-            <package name="testCases.api. authentication"/>
+            <package name="testCases.api.authentication"/>
             <package name="testCases.api.users"/>
             <package name="testCases.api.brands"/>
         </packages>

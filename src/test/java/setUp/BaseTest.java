@@ -52,7 +52,7 @@ public class BaseTest {
 
     @AfterMethod(alwaysRun = true)
 
-    public void tearDown() {
+    /*public void tearDown() {
 
         if (driver != null) {
 
@@ -61,5 +61,15 @@ public class BaseTest {
 
         driverFactory.removeDriver();
 
+    }*/
+    public void tearDown() {
+
+        try {
+            if (driver != null) {
+                driver.quit();
+            }
+        } finally {
+            driverFactory.removeDriver();
+        }
     }
 }

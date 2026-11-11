@@ -1,4 +1,4 @@
-package testCases.ui.navigation;
+package testCases.ui.diagnostics;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;

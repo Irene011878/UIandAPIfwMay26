@@ -46,7 +46,7 @@ public class DriverFactory {
 
     private WebDriver createChromeDriver() {
 
-        ChromeDriver driver =
+       /*ChromeDriver driver =
                 new ChromeDriver(buildChromeOptions());
 
         DRIVER.set(driver);
@@ -71,7 +71,37 @@ public class DriverFactory {
 
         configureDriver(driver);
 
-        return driver;
+        return driver;*/
+        ChromeDriver driver =
+                new ChromeDriver(buildChromeOptions());
+
+        try {
+
+            String downloadPath =
+                    DownloadPathManager.initializeDownloadPath();
+
+            Map<String, Object> downloadBehavior =
+                    new HashMap<>();
+
+            downloadBehavior.put("behavior", "allow");
+            downloadBehavior.put("downloadPath", downloadPath);
+
+            driver.executeCdpCommand(
+                    "Browser.setDownloadBehavior",
+                    downloadBehavior);
+
+            configureDriver(driver);
+
+            DRIVER.set(driver);
+
+            return driver;
+
+        } catch (RuntimeException e) {
+
+            driver.quit();
+
+            throw e;
+        }
 
     }
 
