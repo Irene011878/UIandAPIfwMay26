@@ -30,6 +30,7 @@ This project is not intended to certify the overall quality of Automation Exerci
 | Git / GitHub | Version control |
 | GitHub Actions | Continuous Integration |
 | IntelliJ IDEA | Development environment |
+| Jenkins | Continuous Integration and Pipeline Automation |
 
 ---
 
@@ -235,7 +236,169 @@ No additional synchronization mechanisms or artificial waits were introduced sol
 
 The current implementation is retained, and parallel execution stability remains a potential area for future evaluation.
 
-# 9. Test Incidents and Defect Reports
+
+# 9. Jenkins CI Integration
+
+## Objective
+
+Integrate the existing Java-based UI and REST API automation framework with Jenkins to enable automated test execution through a Declarative Pipeline.
+
+The integration complements the existing GitHub Actions workflow and provides an additional Continuous Integration environment for executing and reporting automated tests.
+
+## Environment and Tools
+
+Jenkins was installed and configured locally on a Windows machine.
+
+| Tool | Configuration |
+|---|---|
+| Jenkins | Local installation |
+| Java | JDK 22 |
+| Maven | Maven 3.10.0 |
+| Allure Commandline | 2.46.0 |
+| Source Control | Git / GitHub |
+| Browser | Chrome |
+| Build Tool | Maven |
+
+The Maven project targets Java 21. Jenkins uses the configured JDK installation to execute the pipeline.
+
+## Jenkins Plugins
+
+The following plugins were installed and configured:
+
+- Git Plugin
+- Pipeline Plugin
+- Allure Jenkins Plugin
+
+## Pipeline Configuration
+
+A Declarative Pipeline was implemented using a `Jenkinsfile` located in the root directory of the project.
+
+The Jenkins job retrieves the pipeline definition directly from the GitHub repository using **Pipeline script from SCM**.
+
+**Repository:**
+
+`https://github.com/Irene011878/UIandAPIfwMay26`
+
+**Branch:** `master`
+
+**Script Path:** `Jenkinsfile`
+
+The Jenkins job is named:
+
+`UIandAPIMay26-Pipeline`
+
+The pipeline definition is maintained in the project repository and is not configured as a manually maintained script within the Jenkins job.
+
+## Pipeline Parameters
+
+The pipeline includes a choice parameter named `TEST_SUITE`, allowing the user to select the test execution scope.
+
+| Parameter | Description |
+|---|---|
+| API | Executes the API TestNG suite. |
+| UI | Executes the UI TestNG suite in headless mode. |
+| BOTH | Executes API tests followed by UI tests. |
+
+The parameter selection is available through the Jenkins **Build with Parameters** option.
+
+## Pipeline Stages
+
+### Checkout
+
+The Checkout stage retrieves the project source code from GitHub using the configured repository and branch.
+
+### Build & Test
+
+The Build & Test stage executes the selected TestNG suite through Maven.
+
+**API execution:**
+
+`mvn clean test -DsuiteXmlFile=src/test/resources/runners/testng-api.xml`
+
+**UI execution:**
+
+`mvn clean test -DsuiteXmlFile=src/test/resources/runners/testng-ui.xml -Dheadless=true`
+
+**BOTH execution:**
+
+1. Execute API tests using `mvn clean test`.
+2. Execute UI tests using `mvn test -Dheadless=true`.
+
+The UI execution in BOTH mode does not use `clean`, preserving the API Allure results before the UI tests run.
+
+## Error Handling
+
+The pipeline captures Maven execution exit codes using `returnStatus: true`.
+
+- API execution failures are reported through the pipeline.
+- UI execution failures are reported through the pipeline.
+- BOTH executes the UI suite even if the API suite returns a failure code.
+- The pipeline reports a failure if either suite fails.
+
+This behavior allows both suites to execute during a BOTH run while preserving the final build status based on the results of both executions.
+
+## Allure Report Integration
+
+Allure report generation was integrated into the Jenkins Pipeline using the Allure Jenkins Plugin.
+
+The report publication is configured within a stage-level `post { always { ... } }` block in the Build & Test stage.
+
+This configuration attempts to generate and archive the Allure report when the Build & Test stage completes, including when test execution fails within that stage.
+
+The stage-level post condition does not cover failures occurring before the Build & Test stage starts, such as Checkout failures.
+
+The configured results directory is:
+
+`allure-results`
+
+The generated report is archived by Jenkins and can be accessed from the corresponding build.
+
+## Execution Validation
+
+The pipeline was validated using all three available execution parameters.
+
+| Execution | Result | Observation |
+|---|---|---|
+| API | SUCCESS | API suite executed successfully. |
+| UI | FAILURE | Existing UI test instability affected the execution. |
+| BOTH | FAILURE | API and UI suites were executed; known UI test failures caused the final pipeline status to be FAILURE. |
+
+The API execution completed successfully.
+
+The UI execution returned a failure status consistent with previously documented UI test incidents.
+
+The BOTH execution ran both suites and returned a failure status because at least one suite failed.
+
+These results represent the observed validation runs and are not intended to establish permanent execution outcomes for future pipeline runs.
+
+## Allure Validation
+
+Allure report generation and publication were successfully validated in Jenkins.
+
+The report was generated from the configured `allure-results` directory and archived by Jenkins.
+
+The report was accessible from the corresponding Jenkins build and maintained the reporting structure and execution evidence already available through IntelliJ IDEA and GitHub Actions.
+
+## Limitations
+
+The UI execution failures observed in Jenkins are consistent with previously documented test incidents involving the public Automation Exercise website.
+
+These results do not independently demonstrate a Jenkins Pipeline configuration defect.
+
+Automation Exercise is a public educational website, and its availability, rendering behavior, response times, and stability are outside the control of this project.
+
+## Conclusion
+
+The Jenkins integration was successfully implemented and validated.
+
+The framework can retrieve its pipeline definition from GitHub, execute API and UI TestNG suites through Maven, accept execution parameters, and generate and archive Allure reports.
+
+The Jenkins integration complements the existing GitHub Actions workflow and provides an additional environment for Continuous Integration practice.
+
+UI test stability remains subject to the limitations and incidents previously documented for the public application.
+
+
+# 10. Test Incidents and Defect Reports
 
 ## Important Note
 
@@ -447,7 +610,7 @@ This message alone does not demonstrate a functional defect in Automation Exerci
 
 ---
 
-## 10. Project Conclusions
+## 11. Project Conclusions
 
 This framework provides hands-on practice and demonstrates the implementation of:
 
@@ -457,7 +620,10 @@ This framework provides hands-on practice and demonstrates the implementation of
 - Test organization and execution with TestNG.
 - Data-driven testing using Excel and DataProviders.
 - Automated reporting with Allure.
-- Continuous Integration using GitHub Actions.
+- Continuous Integration using GitHub Actions and Jenkins.
+- Declarative Pipeline automation using Jenkins.
+- Parameterized API, UI, and combined test execution.
+- Automated Allure report generation and publication.
 - Identification, analysis, and documentation of test incidents.
 
 The reported results represent the behavior observed during test executions against a public educational website.
@@ -466,14 +632,13 @@ The reported results represent the behavior observed during test executions agai
 
 ---
 
-## 11. Future Improvements
+## 12. Future Improvements
 
 - Investigate the reported test incidents when a stable and controlled test environment is available.
 - Continue evaluating UI test stability under controlled execution environments.
 - Reassess parallel execution using a stable and controlled test environment.
 - Implement test data cleanup for API scenarios.
 - Expand test coverage.
-- Review and clean up the existing GitHub Actions pipeline.
-- Improve test report generation and publication through GitHub Actions.
-- Prepare the framework for Jenkins CI integration.
+- Continue evaluating and improving the existing GitHub Actions and Jenkins CI workflows.
+- Evaluate Jenkins pipeline execution in a remote or dedicated CI environment.
 - Explore additional automation tools and testing practices.
